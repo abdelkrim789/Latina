@@ -113,8 +113,8 @@ export function EntryExperience({ prompt, skip, onComplete }: EntryExperiencePro
       .to(
         '[data-particle="true"]',
         {
-          x: (_, target: HTMLElement) => Number(target.dataset.x),
-          y: (_, target: HTMLElement) => Number(target.dataset.y),
+          x: (_, target: HTMLElement) => Number(target.dataset.x ?? 0),
+          y: (_, target: HTMLElement) => Number(target.dataset.y ?? 0),
           autoAlpha: 0,
           duration: 1.2,
           ease: 'power2.out',
