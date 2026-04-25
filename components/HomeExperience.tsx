@@ -24,7 +24,7 @@ export function HomeExperience({ locale, hidden }: HomeExperienceProps) {
       return;
     }
 
-    let splitInstance: { chars?: HTMLElement[]; revert?: () => void } | null = null;
+    let splitInstance: { chars?: Element[]; revert?: () => void } | null = null;
 
     const setup = async () => {
       if (!titleRef.current) {
