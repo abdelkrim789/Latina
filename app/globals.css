@@ -3,31 +3,90 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --color-void: #0d0b10;
+  --color-layer: #1e1428;
+  --color-mauve: #6b4f5c;
+  --color-crimson: #8b1a2f;
+  --color-ember: #c4435a;
+  --color-blush: #f2d8dc;
+  --color-pearl: #e8eaf0;
+  --color-copper: #b87a5a;
+  --color-glow: rgba(196, 67, 90, 0.15);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  background: var(--color-void);
+  color: var(--color-pearl);
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  font-family: var(--font-inter), sans-serif;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.font-headline {
+  font-family: var(--font-cormorant), serif;
+}
+
+.font-body {
+  font-family: var(--font-inter), sans-serif;
+}
+
+.font-accent {
+  font-family: var(--font-playfair), serif;
+}
+
+.font-arabic {
+  font-family: var(--font-naskh), serif;
+}
+
+.bg-void {
+  background-color: var(--color-void);
+}
+
+.bg-layer {
+  background-color: var(--color-layer);
+}
+
+.bg-crimson {
+  background-color: var(--color-crimson);
+}
+
+.text-blush {
+  color: var(--color-blush);
+}
+
+.text-pearl {
+  color: var(--color-pearl);
+}
+
+.text-copper {
+  color: var(--color-copper);
+}
+
+.text-ember {
+  color: var(--color-ember);
+}
+
+.border-mauve {
+  border-color: var(--color-mauve);
+}
+
+.border-ember {
+  border-color: var(--color-ember);
+}
+
+.entry-box {
+  box-shadow:
+    inset 0 1px 0 rgba(232, 234, 240, 0.12),
+    inset 0 -18px 40px rgba(13, 11, 16, 0.28),
+    0 18px 60px rgba(139, 26, 47, 0.35);
+  background-image: linear-gradient(135deg, rgba(232, 234, 240, 0.08), rgba(139, 26, 47, 0.96));
 }

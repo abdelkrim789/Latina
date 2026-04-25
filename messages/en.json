@@ -1,0 +1,24 @@
+{
+  "home": {
+    "entryPrompt": "Click to discover",
+    "skip": "Skip →",
+    "trustTagline": "LUXURY THAT EARNS TRUST",
+    "headline": "Step into a shoe universe designed around your elegance.",
+    "subheadline": "An editorial experience crafted for Algerian women: warmth, surprise and trust in every detail.",
+    "startingFrom": "Starting from 18,900 DZD",
+    "cards": {
+      "01": {
+        "title": "Signature Leather",
+        "text": "Premium materials curated to last and elevate every silhouette."
+      },
+      "02": {
+        "title": "Elegant Delivery",
+        "text": "Refined unboxing, transparent tracking and human support from click to doorstep."
+      },
+      "03": {
+        "title": "Complete Trust",
+        "text": "Secure payments, clear policy and personalized care for every order."
+      }
+    }
+  }
+}

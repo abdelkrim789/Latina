@@ -1,0 +1,24 @@
+{
+  "home": {
+    "entryPrompt": "Cliquez pour découvrir",
+    "skip": "Passer →",
+    "trustTagline": "LE LUXE QUI INSPIRE CONFIANCE",
+    "headline": "Entrez dans un monde de chaussures qui raconte votre élégance.",
+    "subheadline": "Une expérience éditoriale pensée pour les femmes algériennes: chaleur, surprise et confiance à chaque détail.",
+    "startingFrom": "À partir de 18 900 DA",
+    "cards": {
+      "01": {
+        "title": "Cuir Signature",
+        "text": "Des matières premium sélectionnées pour durer et sublimer chaque silhouette."
+      },
+      "02": {
+        "title": "Livraison Élégante",
+        "text": "Unboxing soigné, suivi transparent et service client humain du premier clic à la réception."
+      },
+      "03": {
+        "title": "Confiance Totale",
+        "text": "Paiement sécurisé, politique claire et accompagnement personnalisé pour chaque commande."
+      }
+    }
+  }
+}
