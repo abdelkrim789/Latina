@@ -13,7 +13,6 @@ export default function LocalizedHomePage() {
   return (
     <>
       <EntryExperience
-        locale={locale}
         prompt={t('entryPrompt')}
         skip={t('skip')}
         onComplete={() => setEntered(true)}

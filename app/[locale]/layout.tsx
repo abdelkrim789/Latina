@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { notFound } from 'next/navigation';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
+import { LocaleHtmlAttributes } from '@/components/LocaleHtmlAttributes';
 import { setRequestLocale } from 'next-intl/server';
 import { routing } from '@/i18n/routing';
 
@@ -28,6 +29,7 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
+      <LocaleHtmlAttributes locale={locale} dir={dir} />
       <div dir={dir} className={locale === 'ar' ? 'font-arabic' : ''}>
         {children}
       </div>

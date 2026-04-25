@@ -4,7 +4,6 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import gsap from 'gsap';
 
 type EntryExperienceProps = {
-  locale: string;
   prompt: string;
   skip: string;
   onComplete: () => void;
