@@ -1,27 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Inter:wght@400;500;600&display=swap');
 @import "tailwindcss";
-
-@theme {
-  --font-sans: "Montserrat", "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Cormorant Garamond", serif;
-  
-  --color-luxury-deep: #0A0A0A;
-  --color-luxury-obsidian: #111111;
-  --color-luxury-ivory: #E0DED7;
-  --color-luxury-gold: #D4AF37;
-  --color-luxury-border: rgba(255, 255, 255, 0.1);
-}
-
-@layer base {
-  body {
-    @apply bg-luxury-deep text-luxury-ivory antialiased selection:bg-luxury-gold selection:text-white;
-  }
-}
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
 
 @custom-variant dark (&:is(.dark *));
+
+@theme {
+  --font-sans: "Montserrat", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Cormorant Garamond", serif;
+}
 
 @theme inline {
     --font-heading: "Cormorant Garamond", serif;
@@ -67,8 +55,21 @@
     --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* ═══════════════════════════════════════════════════════════
+   THEME VARIABLES - Light Mode (Default)
+   ═══════════════════════════════════════════════════════════ */
 :root {
-    --background: oklch(1 0 0);
+    /* Latina Brand Colors - Light Theme */
+    --latina-bg: #FAFAF9;
+    --latina-text: #1a1a1a;
+    --latina-text-muted: rgba(26, 26, 26, 0.5);
+    --latina-accent: #B8956A;
+    --latina-accent-hover: #A07D52;
+    --latina-border: rgba(26, 26, 26, 0.08);
+    --latina-card-bg: #FFFFFF;
+    
+    /* Shadcn UI Variables */
+    --background: oklch(0.99 0 0);
     --foreground: oklch(0.145 0 0);
     --card: oklch(1 0 0);
     --card-foreground: oklch(0.145 0 0);
@@ -102,7 +103,20 @@
     --sidebar-ring: oklch(0.708 0 0);
 }
 
+/* ═══════════════════════════════════════════════════════════
+   THEME VARIABLES - Dark Mode
+   ═══════════════════════════════════════════════════════════ */
 .dark {
+    /* Latina Brand Colors - Dark Theme */
+    --latina-bg: #0A0A0A;
+    --latina-text: #F5F0E8;
+    --latina-text-muted: rgba(245, 240, 232, 0.5);
+    --latina-accent: #C9A96E;
+    --latina-accent-hover: #E8C4B8;
+    --latina-border: rgba(245, 240, 232, 0.05);
+    --latina-card-bg: #111111;
+    
+    /* Shadcn UI Variables */
     --background: oklch(0.145 0 0);
     --foreground: oklch(0.985 0 0);
     --card: oklch(0.205 0 0);
@@ -139,11 +153,16 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    }
+  }
+  
   body {
-    @apply bg-background text-foreground;
-    }
+    @apply bg-background text-foreground antialiased;
+    background-color: var(--latina-bg);
+    color: var(--latina-text);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
   html {
     @apply font-sans;
-    }
+  }
 }

@@ -1,161 +1,118 @@
-import React, { useState, useEffect } from 'react';
-import { collection, query, getDocs, orderBy, updateDoc, doc } from 'firebase/firestore';
-import { db } from '../lib/firebase';
-import { 
-  Search, 
-  Filter, 
-  ExternalLink, 
-  Truck, 
-  CheckCircle2, 
-  Clock, 
-  XCircle,
-  Eye
-} from 'lucide-react';
-import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
-import { Badge } from '../components/ui/badge';
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
-} from '../components/ui/table';
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
-} from '../components/ui/select';
+import { useState } from 'react';
+import { Search, Truck, CheckCircle2, Clock, XCircle } from 'lucide-react';
 import { toast } from 'sonner';
 
-const AdminOrders = () => {
-    const [orders, setOrders] = useState<any[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [search, setSearch] = useState('');
+interface Order {
+  id: string;
+  customer: string;
+  email: string;
+  amount: number;
+  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+  date: string;
+}
 
-    useEffect(() => {
-        fetchOrders();
-    }, []);
+const mockOrders: Order[] = [
+  { id: 'ORD001', customer: 'Sophie Laurent', email: 'sophie@example.com', amount: 1450, status: 'delivered', date: '2026-04-20' },
+  { id: 'ORD002', customer: 'Amira Hassan', email: 'amira@example.com', amount: 890, status: 'shipped', date: '2026-04-22' },
+  { id: 'ORD003', customer: 'Elena Rossi', email: 'elena@example.com', amount: 2340, status: 'processing', date: '2026-04-24' },
+  { id: 'ORD004', customer: 'Nadia Benali', email: 'nadia@example.com', amount: 780, status: 'pending', date: '2026-04-26' },
+  { id: 'ORD005', customer: 'Camille Dubois', email: 'camille@example.com', amount: 3200, status: 'delivered', date: '2026-04-27' },
+];
 
-    const fetchOrders = async () => {
-        setLoading(true);
-        try {
-            const q = query(collection(db, 'orders'), orderBy('createdAt', 'desc'));
-            const querySnapshot = await getDocs(q);
-            setOrders(querySnapshot.docs.map(d => ({id: d.id, ...d.data()})));
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const updateStatus = async (orderId: string, newStatus: string) => {
-        try {
-            await updateDoc(doc(db, 'orders', orderId), { status: newStatus });
-            toast.success("Status Updated", { description: `Order status changed to ${newStatus}.` });
-            fetchOrders();
-        } catch (error) {
-            toast.error("Error", { description: "Failed to update status." });
-        }
-    };
-
-    const filteredOrders = orders.filter(o => o.customerEmail.toLowerCase().includes(search.toLowerCase()) || o.id.includes(search));
-
-    const getStatusIcon = (status: string) => {
-        switch(status) {
-            case 'pending': return <Clock className="w-3 h-3 text-amber-500" />;
-            case 'processing': return <RefreshCw className="w-3 h-3 text-blue-500 animate-spin" />;
-            case 'shipped': return <Truck className="w-3 h-3 text-purple-500" />;
-            case 'delivered': return <CheckCircle2 className="w-3 h-3 text-green-500" />;
-            case 'cancelled': return <XCircle className="w-3 h-3 text-red-500" />;
-            default: return null;
-        }
-    };
-
-    return (
-        <div className="space-y-8 animate-in fade-in duration-500">
-             <div>
-                <h2 className="text-2xl font-serif text-zinc-900 tracking-tight">Order Management</h2>
-                <p className="text-xs text-zinc-500 uppercase tracking-widest mt-1">Track and process client acquisitions</p>
-            </div>
-
-            <div className="bg-white rounded-xl border border-zinc-200 overflow-hidden">
-                <div className="p-6 border-b border-zinc-100 flex items-center justify-between">
-                    <div className="relative w-full max-w-sm">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 w-4 h-4" />
-                        <Input 
-                            placeholder="Search by order ID or email..." 
-                            className="pl-10 h-10 text-xs border-zinc-100 bg-zinc-50"
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                        />
-                    </div>
-                </div>
-
-                <div className="overflow-x-auto">
-                    <Table>
-                        <TableHeader>
-                            <TableRow className="bg-zinc-50/50">
-                                <TableHead className="text-[10px] uppercase font-bold px-8">Order ID</TableHead>
-                                <TableHead className="text-[10px] uppercase font-bold">Client</TableHead>
-                                <TableHead className="text-[10px] uppercase font-bold">Value</TableHead>
-                                <TableHead className="text-[10px] uppercase font-bold">Status</TableHead>
-                                <TableHead className="text-[10px] uppercase font-bold">Date</TableHead>
-                                <TableHead className="text-[10px] uppercase font-bold text-right px-8">Process</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {loading ? (
-                                <TableRow><TableCell colSpan={6} className="text-center py-20 font-serif italic text-zinc-400">Loading acquisitions...</TableCell></TableRow>
-                            ) : filteredOrders.length === 0 ? (
-                                <TableRow><TableCell colSpan={6} className="text-center py-20 font-serif italic text-zinc-400">No transactions found.</TableCell></TableRow>
-                            ) : filteredOrders.map((o) => (
-                                <TableRow key={o.id} className="hover:bg-zinc-50/50 transition-colors">
-                                    <TableCell className="px-8 font-mono text-[10px] text-zinc-400">#{o.id.slice(0, 8).toUpperCase()}</TableCell>
-                                    <TableCell>
-                                        <p className="text-xs font-semibold">{o.customerEmail}</p>
-                                    </TableCell>
-                                    <TableCell className="text-sm font-serif italic">${o.totalAmount.toLocaleString()}</TableCell>
-                                    <TableCell>
-                                        <div className="flex items-center space-x-2">
-                                            {getStatusIcon(o.status)}
-                                            <Badge variant="outline" className="text-[9px] uppercase tracking-tighter border-zinc-200">
-                                                {o.status}
-                                            </Badge>
-                                        </div>
-                                    </TableCell>
-                                    <TableCell className="text-[10px] text-zinc-400">
-                                        {new Date(o.createdAt).toLocaleDateString()}
-                                    </TableCell>
-                                    <TableCell className="text-right px-8">
-                                        <Select value={o.status} onValueChange={(v) => updateStatus(o.id, v)}>
-                                            <SelectTrigger className="h-8 w-32 text-[9px] uppercase tracking-widest font-bold">
-                                                <SelectValue />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="pending">Pending</SelectItem>
-                                                <SelectItem value="processing">Processing</SelectItem>
-                                                <SelectItem value="shipped">Shipped</SelectItem>
-                                                <SelectItem value="delivered">Delivered</SelectItem>
-                                                <SelectItem value="cancelled">Cancelled</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </div>
-            </div>
-        </div>
-    );
+const statusColors: Record<string, string> = {
+  pending: 'bg-amber-100 text-amber-700',
+  processing: 'bg-blue-100 text-blue-700',
+  shipped: 'bg-purple-100 text-purple-700',
+  delivered: 'bg-green-100 text-green-700',
+  cancelled: 'bg-red-100 text-red-700',
 };
 
-// Mock RefreshCw since it's not in my list but used it by mistake
-const RefreshCw = ({className}: any) => <div className={className}>↻</div>;
+const statusIcons: Record<string, React.ReactNode> = {
+  pending: <Clock className="w-3 h-3 text-amber-500" />,
+  processing: <div className="w-3 h-3 text-blue-500 animate-spin">↻</div>,
+  shipped: <Truck className="w-3 h-3 text-purple-500" />,
+  delivered: <CheckCircle2 className="w-3 h-3 text-green-500" />,
+  cancelled: <XCircle className="w-3 h-3 text-red-500" />,
+};
 
-export default AdminOrders;
+export default function AdminOrders() {
+  const [orders] = useState<Order[]>(mockOrders);
+  const [search, setSearch] = useState('');
+
+  const filtered = orders.filter(o =>
+    o.customer.toLowerCase().includes(search.toLowerCase()) || o.id.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const updateStatus = (id: string, newStatus: string) => {
+    toast.success(`Status updated to ${newStatus}.`);
+  };
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-2xl font-serif text-zinc-900">Order Management</h2>
+        <p className="text-xs text-zinc-500 uppercase tracking-widest mt-1">Track and process acquisitions</p>
+      </div>
+
+      <div className="bg-white border border-zinc-200 rounded-xl overflow-hidden">
+        <div className="p-4 border-b border-zinc-100">
+          <div className="relative max-w-sm">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 w-4 h-4" />
+            <input
+              placeholder="Search by order ID or client..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 bg-zinc-50 border border-zinc-100 text-xs focus:outline-none focus:border-zinc-300 rounded-lg"
+            />
+          </div>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-zinc-50/50">
+              <tr>
+                {['Order', 'Client', 'Amount', 'Status', 'Date', ''].map(h => (
+                  <th key={h} className="px-6 py-3 text-left text-[10px] uppercase tracking-widest font-bold text-zinc-400">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-zinc-50">
+              {filtered.map(o => (
+                <tr key={o.id} className="hover:bg-zinc-50/50 transition-colors">
+                  <td className="px-6 py-4 font-mono text-[10px] text-zinc-400">#{o.id}</td>
+                  <td className="px-6 py-4">
+                    <p className="text-xs font-semibold">{o.customer}</p>
+                    <p className="text-[10px] text-zinc-400">{o.email}</p>
+                  </td>
+                  <td className="px-6 py-4 text-sm font-serif italic">${o.amount.toLocaleString()}</td>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-2">
+                      {statusIcons[o.status]}
+                      <span className={`text-[9px] uppercase tracking-wider px-2 py-1 rounded-full font-bold ${statusColors[o.status]}`}>
+                        {o.status}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 text-[10px] text-zinc-400">{o.date}</td>
+                  <td className="px-6 py-4 text-right">
+                    <select
+                      value={o.status}
+                      onChange={e => updateStatus(o.id, e.target.value)}
+                      className="text-[9px] uppercase tracking-widest font-bold border border-zinc-200 px-3 py-1.5 rounded-lg bg-white focus:outline-none focus:border-zinc-900"
+                    >
+                      <option value="pending">Pending</option>
+                      <option value="processing">Processing</option>
+                      <option value="shipped">Shipped</option>
+                      <option value="delivered">Delivered</option>
+                      <option value="cancelled">Cancelled</option>
+                    </select>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
